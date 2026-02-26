@@ -243,7 +243,7 @@ function getEtudiantsPaginated($limit, $offset, $niveau = null, $classe = null){
     if($niveau){
         $stmt->bindValue(':niveau', $niveau);
     }
-
+    
     if($classe){
         $stmt->bindValue(':classe', $classe);
     }
