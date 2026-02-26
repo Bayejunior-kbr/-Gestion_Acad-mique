@@ -103,7 +103,7 @@ Somme (Moyenne Module × Coefficient)
 1. Cloner le projet :
 
 ```bash
-git clone https://github.com/votre-repo/mini_projet.git
+https://github.com/Bayejunior-kbr/-Gestion_Acad-mique.git
 ```
 
 2. Placer le dossier dans :

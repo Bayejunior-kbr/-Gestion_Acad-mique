@@ -12,8 +12,7 @@ if (!$etudiant) die("Étudiant introuvable.");
 
 // --- LOGIQUE DE RÉCUPÉRATION (Optimisée) ---
 global $pdo;
-$stmt = $pdo->prepare("
-    SELECT 
+$stmt = $pdo->prepare(" SELECT 
         m.nom_module,
         cm.coefficient,
         ev.type_evaluation,
@@ -27,8 +26,9 @@ $stmt = $pdo->prepare("
     WHERE cm.id_classe = :classe
     ORDER BY m.nom_module
 ");
+   
 $stmt->execute([':id' => $id, ':classe' => $etudiant['id_classe']]);
-$notesRaw = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$notesRaw = $stmt->fetchAll();
 
 $modules = [];
 foreach($notesRaw as $row){
@@ -36,7 +36,7 @@ foreach($notesRaw as $row){
     if(!isset($modules[$module])){
         $modules[$module] = [
             'coefficient' => $row['coefficient'],
-            'devoir' => null, // null pour différencier 0 de "pas de note"
+            'devoir' => null, 
             'examen' => null
         ];
     }
@@ -50,8 +50,6 @@ foreach($notesRaw as $row){
 // --- CLASSE PDF PERSONNALISÉE ---
 class BulletinPDF extends FPDF {
     function Header() {
-        // Logo (à décommenter si vous avez un fichier logo.png)
-        // $this->Image('assets/img/logo.png', 10, 6, 30);
         
         $this->SetFont('Arial', 'B', 15);
         $this->SetTextColor(33, 37, 41);
@@ -98,7 +96,7 @@ $pdf->Cell(0, 7, utf8_decode($etudiant['nom_classe'] . ' (' . $etudiant['nom_niv
 $pdf->Ln(10);
 
 // Entête du tableau
-$pdf->SetFillColor(44, 62, 80); // Bleu foncé pro
+$pdf->SetFillColor(44, 62, 80); 
 $pdf->SetTextColor(255, 255, 255);
 $pdf->SetFont('Arial', 'B', 10);
 

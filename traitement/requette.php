@@ -13,13 +13,14 @@ function getNiveaux(){
     $stmt = $pdo->query($sql);
     $niveaux=$stmt->fetchAll();
 
-     foreach ($niveaux as &$niveau) {
+    foreach ($niveaux as &$niveau) {
         $stmt2 = $pdo->prepare("SELECT id_classe, nom_classe FROM classe WHERE id_niveau = ?");
         $stmt2->execute([$niveau['id_niveau']]);
         $niveau['classes'] = $stmt2->fetchAll();
     }
     return $niveaux;
 }
+
 /*ajouter les niveaux*/
 function addNiveau($nom_niveau){
     global $pdo;
@@ -246,10 +247,8 @@ function getEtudiantsPaginated($limit, $offset, $niveau = null, $classe = null){
     if($classe){
         $stmt->bindValue(':classe', $classe);
     }
-
     $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
     $stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
-
     $stmt->execute();
     return $stmt->fetchAll();
 }
@@ -274,7 +273,6 @@ function genererMatricule($id_classe) {
         $numero = 1;
     }
     $numero = str_pad($numero, 4, "0", STR_PAD_LEFT);
-
     return $annee . "-ETU-" . $numero;
 }
 
@@ -296,7 +294,6 @@ function addModule($code_module,$nom_module){
     if ($check->rowCount() > 0) {
         return false;
     }
-
     $sql="INSERT into module (code_module,nom_module) values (?,?)";
     $stmt=$pdo->prepare($sql);
     return $stmt->execute([$code_module,$nom_module]);
@@ -351,10 +348,10 @@ function getClasse_module() {
                 cm.coefficient, 
                 c.nom_classe, 
                 m.nom_module,
-                n.nom_niveau          -- <-- ajout du niveau
+                n.nom_niveau          
             FROM classe_module cm
             INNER JOIN classe c ON cm.id_classe = c.id_classe
-            INNER JOIN niveau n ON c.id_niveau = n.id_niveau   -- <-- jointure niveau
+            INNER JOIN niveau n ON c.id_niveau = n.id_niveau   
             INNER JOIN module m ON cm.id_module = m.id_module
             ORDER BY c.nom_classe, cm.coefficient";
     $stmt = $pdo->query($sql);
@@ -574,8 +571,7 @@ function getMoyennesPaginated($limit, $offset, $classe = '', $niveau = '', $nom 
 
     foreach($etudiants as &$e){
         // Récupérer les notes par module
-        $modStmt = $pdo->prepare("
-            SELECT 
+        $modStmt = $pdo->prepare(" SELECT 
                 m.id_module,
                 m.nom_module,
                 cm.coefficient,
@@ -587,6 +583,7 @@ function getMoyennesPaginated($limit, $offset, $classe = '', $niveau = '', $nom 
                 ON ev.id_module = cm.id_module AND ev.id_etudiant = :id AND ev.type_evaluation<>'TP'
             WHERE cm.id_classe = :classe
         ");
+           
         $modStmt->execute([':id'=>$e['id_etudiant'], ':classe'=>$e['id_classe']]);
         $modules = $modStmt->fetchAll();
 
@@ -719,22 +716,19 @@ function getNombreEtudiantParNiveau() {
 function getNombreClasseParNiveau() {
     global $pdo;
 
-    $sql = "
-        SELECT n.nom_niveau, COUNT(c.id_classe) as total
+    $sql = "  SELECT n.nom_niveau, COUNT(c.id_classe) as total
         FROM niveau n
         LEFT JOIN classe c ON n.id_niveau = c.id_niveau
         GROUP BY n.id_niveau
         ORDER BY n.nom_niveau
     ";
-
     return $pdo->query($sql)->fetchAll();
 }
 
 
 function getMoyennesGenerales() {
     global $pdo;
-    $sql = "
-        SELECT 
+    $sql = "SELECT 
             e.id_etudiant,
             e.nom,
             e.prenom,
@@ -766,7 +760,6 @@ function getMoyennesGenerales() {
 
         GROUP BY e.id_etudiant
     ";
-
     return $pdo->query($sql)->fetchAll();
 }
 
