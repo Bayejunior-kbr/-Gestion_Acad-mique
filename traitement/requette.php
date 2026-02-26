@@ -606,16 +606,13 @@ function getMoyennesPaginated($limit, $offset, $classe = '', $niveau = '', $nom 
             $totalNotes += $moyModule * $mod['coef'];
             $totalCoeff += $mod['coef'];
         }
-
         $e['moyenne'] = $totalCoeff>0 ? round($totalNotes/$totalCoeff,2) : 0;
     }
-
     return $etudiants;
 }
 function getBulletinData($id)
 {
     global $pdo;
-
     // Récupérer infos étudiant + moyenne calculée sur devoir/examen
     $sql = "SELECT 
             e.id_etudiant,

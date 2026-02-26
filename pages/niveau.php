@@ -73,7 +73,7 @@
     </div>
 
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-        <?php foreach ($listeniveau as $niveau) : ?>
+        <?php foreach ($listeniveau as $niveau):?>
         <div class="col">
             <div class="card h-100 shadow-sm text-center card-hover border-bottom border-3 <?= $niveau['nb_classes'] == 0 ? 'border-danger' : 'border-success' ?>">
                 <div class="card-body p-4">

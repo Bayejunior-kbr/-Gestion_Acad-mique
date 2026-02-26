@@ -114,7 +114,7 @@ $redouble = $stats['redouble'];
 $renvoye = $stats['renvoye'];
 $totalGeneral = $admis + $redouble + $renvoye;
 
-// Helper pour le calcul de pourcentage
+//  pour le calcul de pourcentage
 function getPercent($val, $total) {
     return ($total > 0) ? round(($val / $total) * 100, 1) : 0;
 } 
